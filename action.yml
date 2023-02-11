@@ -4,7 +4,7 @@ author: 'zkoppert'
 description: 'A GitHub Action to create a list of InnerSource repos within an organization.'
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/zkoppert/innersource-crawler:v1'
+  image: 'ghcr.io/octodemo/innersource-spider-mc:main'
 branding:
   icon: 'check-square'
   color: 'white'
