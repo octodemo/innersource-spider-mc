@@ -40,7 +40,6 @@ if __name__ == "__main__":
             if repo is not None and repo.repository.full_name not in repo_set:
                 repo_set.add(repo.repository.full_name)
                 print("{0}".format(repo.repository))
-                full_repository = repo.repository.refresh()
 
                 innersource_repo = repo.as_dict()
                 innersource_repo["_InnerSourceMetadata"] = {}
