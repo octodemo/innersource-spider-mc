@@ -24,21 +24,21 @@ if __name__ == "__main__":
 
     # Set the topic
     topic = os.getenv("TOPIC")
-    # Check if there's more than one topic
-    if ',' in topic:
-        topics = [t.strip() for t in topic.split(',')]
-    else:
-        topics = [topic]
+    # Split topics by comma and strip each topic
+    topics = [t.strip() for t in topic.split(',')]
     organization = os.getenv("ORGANIZATION")
 
     # Get all repos from organization
     repo_list = []
+    # Set for repos that have already been added to all_repos
+    repo_set = set()
     for topic in topics:
         search_string = "org:{} topic:{}".format(organization, topic)
         all_repos = gh.search_repositories(search_string)
 
         for repo in all_repos:
-            if repo is not None:
+            if repo is not None and repo.repository.full_name not in repo_set:
+                repo_set.add(repo.repository.full_name)
                 print("{0}".format(repo.repository))
                 full_repository = repo.repository.refresh()
 
@@ -73,8 +73,8 @@ if __name__ == "__main__":
                     pass
 
                 # fetch repository topics
-                topics = repo.repository.topics()
-                innersource_repo["_InnerSourceMetadata"]["topics"] = topics.names
+                repo_topics = repo.repository.topics()
+                innersource_repo["_InnerSourceMetadata"]["topics"] = repo_topics.names
 
                 # calculate score
                 innersource_repo["score"] = repo_activity.score.calculate(innersource_repo)
